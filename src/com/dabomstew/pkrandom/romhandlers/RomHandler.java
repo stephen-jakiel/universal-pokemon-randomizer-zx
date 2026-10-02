@@ -25,7 +25,6 @@ package com.dabomstew.pkrandom.romhandlers;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
-import java.awt.image.BufferedImage;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
@@ -627,7 +626,10 @@ public interface RomHandler {
 
     void randomizeIntroPokemon();
 
-    BufferedImage getMascotImage();
+    // [melonDS-android fork] getMascotImage() (and its implementations in
+    // each generation handler) removed -- it's a Swing-GUI-only sprite
+    // preview feature (java.awt.image.BufferedImage, not available on
+    // Android), never called from the CLI entry point this fork uses.
 
     int generationOfPokemon();
 

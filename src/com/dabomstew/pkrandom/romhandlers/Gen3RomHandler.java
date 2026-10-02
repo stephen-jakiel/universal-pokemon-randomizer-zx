@@ -24,7 +24,6 @@ package com.dabomstew.pkrandom.romhandlers;
 /*--  along with this program. If not, see <http://www.gnu.org/licenses/>.  --*/
 /*----------------------------------------------------------------------------*/
 
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -4396,29 +4395,7 @@ public class Gen3RomHandler extends AbstractGBRomHandler {
         return romEntry.expectedCRC32 == actualCRC32;
     }
 
-    @Override
-    public BufferedImage getMascotImage() {
-        Pokemon mascotPk = randomPokemon();
-        int mascotPokemon = pokedexToInternal[mascotPk.number];
-        int frontSprites = romEntry.getValue("FrontSprites");
-        int palettes = romEntry.getValue("PokemonPalettes");
-        int fsOffset = readPointer(frontSprites + mascotPokemon * 8);
-        int palOffset = readPointer(palettes + mascotPokemon * 8);
-
-        byte[] trueFrontSprite = DSDecmp.Decompress(rom, fsOffset);
-        byte[] truePalette = DSDecmp.Decompress(rom, palOffset);
-
-        // Convert palette into RGB
-        int[] convPalette = new int[16];
-        // Leave palette[0] as 00000000 for transparency
-        for (int i = 0; i < 15; i++) {
-            int palValue = readWord(truePalette, i * 2 + 2);
-            convPalette[i + 1] = GFXFunctions.conv16BitColorToARGB(palValue);
-        }
-
-        // Make image, 4bpp
-        return GFXFunctions.drawTiledImage(trueFrontSprite, convPalette, 64, 64, 4);
-    }
+    // [melonDS-android fork] getMascotImage() removed -- Swing-GUI-only sprite preview, never called from the CLI entry point this fork uses.
 
     @Override
     public List<Integer> getAllHeldItems() {

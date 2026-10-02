@@ -20,14 +20,16 @@ public class CliRandomizer {
                                                       String destinationRomFilePath, boolean saveAsDirectory,
                                                       String updateFilePath, boolean saveLog) {
         // borrowed directly from NewRandomizerGUI()
+        // [melonDS-android fork] Gen6/Gen7 (3DS) removed -- melonDS only
+        // emulates DS/DSi, and these were the only remaining reference to
+        // those two handlers (and, transitively, the 3DS-specific ctr.*
+        // package) anywhere in this trimmed-down fork.
         RomHandler.Factory[] checkHandlers = new RomHandler.Factory[] {
                 new Gen1RomHandler.Factory(),
                 new Gen2RomHandler.Factory(),
                 new Gen3RomHandler.Factory(),
                 new Gen4RomHandler.Factory(),
-                new Gen5RomHandler.Factory(),
-                new Gen6RomHandler.Factory(),
-                new Gen7RomHandler.Factory()
+                new Gen5RomHandler.Factory()
         };
 
         Settings settings;
@@ -81,7 +83,11 @@ public class CliRandomizer {
                         extensions.remove(romHandler.getDefaultExtension());
 
                         fh = FileFunctions.fixFilename(fh, romHandler.getDefaultExtension(), extensions);
-                        if (romHandler instanceof AbstractDSRomHandler || romHandler instanceof Abstract3DSRomHandler) {
+                        // [melonDS-android fork] Was also `|| romHandler instanceof
+                        // Abstract3DSRomHandler` -- removed along with Gen6/Gen7 above,
+                        // this safety check (don't silently overwrite the source ROM)
+                        // still fully applies to Gen4/Gen5 via AbstractDSRomHandler.
+                        if (romHandler instanceof AbstractDSRomHandler) {
                             String currentFN = romHandler.loadedFilename();
                             if (currentFN.equals(fh.getAbsolutePath())) {
                                 printError(bundle.getString("GUI.cantOverwriteDS"));

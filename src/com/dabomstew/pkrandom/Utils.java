@@ -38,7 +38,6 @@ import java.util.Base64;
 import java.util.zip.CRC32;
 
 import com.dabomstew.pkrandom.exceptions.InvalidSupplementFilesException;
-import com.dabomstew.pkrandom.newgui.NewRandomizerGUI;
 
 public class Utils {
 
@@ -116,7 +115,11 @@ public class Utils {
     }
 
     public static File getExecutionLocation() throws UnsupportedEncodingException {
-        URL location = NewRandomizerGUI.class.getProtectionDomain().getCodeSource().getLocation();
+        // [melonDS-android fork] Was NewRandomizerGUI.class -- any class from
+        // this same jar works identically here (it's just a handle on the
+        // jar's own location), and the Swing GUI package isn't part of
+        // this trimmed-down, Android-compatible fork.
+        URL location = Utils.class.getProtectionDomain().getCodeSource().getLocation();
         String file = location.getFile();
         String plusEncoded = file.replaceAll("\\+", "%2b");
         return new File(java.net.URLDecoder.decode(plusEncoded, "UTF-8"));
